@@ -102,7 +102,15 @@ h1 .design { color: var(--explore); }
 
 /* Element shapes: the three phase shapes from the STEMIA graphic, each circle is a button */
 .shapes-wrap { display: grid; gap: 14px; }
-.hint { margin: 0; color: var(--muted); font-size: 15px; text-align: center; }
+.hint { margin: 8px 0 22px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+.hint .tapdot { position: relative; width: 22px; height: 22px; border-radius: 50%; background: var(--ink); }
+.hint .tapdot::after { content: ""; position: absolute; inset: -8px; border-radius: 50%; border: 2px solid var(--ink); animation: tap 1.8s ease-out infinite; }
+.hint strong { font-family: var(--display); font-weight: 800; font-size: clamp(22px, 3vw, 32px); line-height: 1.15; color: var(--ink); text-wrap: balance; max-width: 24ch; }
+.hint strong em { font-style: normal; color: var(--explore); }
+.hint .arrow { width: 14px; height: 14px; border-right: 3px solid var(--muted); border-bottom: 3px solid var(--muted); rotate: 45deg; animation: nudge 1.6s ease-in-out infinite; }
+@keyframes tap { 0% { transform: scale(.6); opacity: .9; } 100% { transform: scale(1.5); opacity: 0; } }
+@keyframes nudge { 0%, 100% { translate: 0 0; } 50% { translate: 0 6px; } }
+@media (prefers-reduced-motion: reduce) { .hint .tapdot::after, .hint .arrow { animation: none; } }
 .shapes { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 28px; align-items: center; }
 .grp { min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .grp.explore { flex-direction: row; gap: 10px; }
@@ -193,17 +201,27 @@ footer p { margin: 0 0 6px; }
 .sec-head h2 { font-size: clamp(24px, 3vw, 32px); }
 
 /* Video */
-.video { position: relative; aspect-ratio: 16 / 9; max-width: 100%; border-radius: 20px; overflow: hidden; background: #161a30; }
-.video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-.vcard { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 14px; text-decoration: none; color: #fff; background: linear-gradient(120deg, #161a30 30%, #2b4a6b 75%, #74a3c7); }
-.vcard .play { width: 84px; height: 84px; border-radius: 50%; background: #f0cc4f; display: grid; place-items: center; transition: transform .15s ease; }
-.vcard:hover .play { transform: scale(1.08); }
-.vcard .play::after { content: ""; border-left: 26px solid #161a30; border-top: 16px solid transparent; border-bottom: 16px solid transparent; margin-left: 6px; }
-.vcard span { font-family: var(--display); font-weight: 700; font-size: 18px; }
-.vcard small { opacity: .8; font-size: 14px; }
-.vlink { margin: 10px 0 0; font-size: 14px; color: var(--muted); }
+.watch-row { display: flex; justify-content: flex-start; margin-top: -66px; }
+.vbtn { display: inline-flex; align-items: center; gap: 14px; padding: 0; border: none; background: none; color: var(--ink); font-family: var(--display); text-decoration: none; cursor: pointer; text-align: left; }
+.vring { position: relative; width: 154px; height: 154px; flex: none; display: grid; place-items: center; }
+.vring .txt { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; animation: spin 30s linear infinite; }
+.vring text { font-family: var(--display); font-weight: 700; font-size: 12.5px; letter-spacing: 2px; fill: var(--muted); }
+.vring .core { position: relative; width: 94px; height: 94px; border-radius: 50%; background: var(--ink); display: grid; place-items: center; box-shadow: 0 10px 18px -8px rgba(22, 26, 48, .5); transition: transform .2s ease; }
+.vring .core::after { content: ""; border-left: 28px solid #f0cc4f; border-top: 17px solid transparent; border-bottom: 17px solid transparent; margin-left: 8px; }
+.vbtn:hover .core, .vbtn:focus-visible .core { transform: scale(1.07); }
+.vtitle { font-weight: 700; font-size: 24px; line-height: 1.2; max-width: 14ch; }
+@keyframes spin { to { rotate: 360deg; } }
+@media (prefers-reduced-motion: reduce) { .vring .txt { animation: none; } }
+.vmodal { padding: 0; border: none; border-radius: 18px; width: min(960px, calc(100% - 32px)); background: #000; overflow: visible; box-shadow: 0 30px 80px rgba(0, 0, 0, .5); }
+.vmodal::backdrop { background: rgba(10, 12, 24, .82); }
+.vmodal .close { top: -50px; right: 0; }
+.vframe { position: relative; aspect-ratio: 16 / 9; border-radius: 18px; overflow: hidden; }
+.vframe iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.vnote { position: absolute; left: 0; right: 0; bottom: -34px; margin: 0; text-align: center; font-size: 14px; color: #c9cfdf; }
+.vnote a { color: #f0cc4f; }
 
 @media (max-width: 860px) {
+  .watch-row { margin-top: 0; }
   .squiggle { opacity: .55; }
   .cs { flex-wrap: wrap; }
   .top { grid-template-columns: 1fr; }
@@ -249,16 +267,11 @@ footer p { margin: 0 0 6px; }
     </div>
   </header>
 
-  <section class="video-sec" id="video" aria-labelledby="vidT">
-    <div class="sec-head">
-      <div class="eyebrow">Explainer video</div>
-      <h2 id="vidT">Watch the design process explained</h2>
-    </div>
-    <div class="video" id="videoBox"></div>
-  </section>
+  <div class="watch-row"><span id="videoSlot"></span></div>
+
 
   <section class="shapes-wrap" id="elements" aria-label="Design elements">
-    <p class="hint">Tap any circle to open its research and teaching guide.</p>
+    <p class="hint"><strong>Tap any circle to open its <em>research and teaching guide</em></strong></p>
     <div class="shapes">
       <div class="grp explore">
                 <div class="vlabel" aria-hidden="true"><span>E</span><span>X</span><span>P</span><span>L</span><span>O</span><span>R</span><span>E</span></div>
@@ -293,6 +306,12 @@ footer p { margin: 0 0 6px; }
     <span class="bar" aria-hidden="true"></span>
     <p><strong>Showcase runs the whole time.</strong> Learners share and reflect during Explore and Create &amp; Solve, not only at the end. Every element below has a gold Showcase checkpoint so it happens in every lesson.</p>
   </div>
+
+  <dialog class="vmodal" id="vmodal" aria-label="STEMIA Design Process Explained">
+    <div class="close-bar"><button type="button" class="close" id="vClose" aria-label="Close video">×</button></div>
+    <div class="vframe" id="vframe"></div>
+    <p class="vnote">Video not playing? <a id="vYT" target="_blank" rel="noopener">Watch it on YouTube</a></p>
+  </dialog>
 
   <dialog class="modal" id="modal" aria-labelledby="mTitle">
     <div class="close-bar"><button type="button" class="close" id="closeBtn" aria-label="Close">×</button></div>
@@ -585,13 +604,23 @@ if (E.some(e => "#" + e.id === location.hash)) go(location.hash.slice(1));
 const VIDEO_ID = "mjYmA1DKTfM";
 const WEBSITE = true; /* true on the website build: embeds the player instead of linking out */
 (function () {
-  const box = document.getElementById("videoBox");
-  if (WEBSITE) {
-    box.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${VIDEO_ID}?rel=0" title="STEMIA design process explainer video" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>`;
-    box.insertAdjacentHTML("afterend", `<p class="vlink">Video not playing? <a href="https://www.youtube.com/watch?v=${VIDEO_ID}" target="_blank" rel="noopener">Watch it on YouTube</a></p>`);
-  } else {
-    box.innerHTML = `<a class="vcard" href="https://www.youtube.com/watch?v=${VIDEO_ID}" target="_blank" rel="noopener"><div class="play" aria-hidden="true"></div><span>Play the explainer</span><small>Opens on YouTube</small></a>`;
+  const slot = document.getElementById("videoSlot");
+  const label = `<span class="vring" aria-hidden="true"><svg class="txt" viewBox="0 0 136 136"><defs><path id="vArc" d="M68,68 m-56,0 a56,56 0 1,1 112,0 a56,56 0 1,1 -112,0"/></defs><text><textPath href="#vArc" textLength="350" lengthAdjust="spacing">WATCH HERE ✦ WATCH HERE ✦ </textPath></text></svg><span class="core"></span></span><span class="vtitle">STEMIA Design Process Explained</span>`;
+  const yt = `https://www.youtube.com/watch?v=${VIDEO_ID}`;
+  if (!WEBSITE) {
+    slot.outerHTML = `<a class="vbtn" href="${yt}" target="_blank" rel="noopener">${label}</a>`;
+    return;
   }
+  slot.outerHTML = `<button type="button" class="vbtn" id="videoBtn" aria-haspopup="dialog">${label}</button>`;
+  const dlg = document.getElementById("vmodal"), frame = document.getElementById("vframe");
+  document.getElementById("vYT").href = yt;
+  document.getElementById("videoBtn").addEventListener("click", () => {
+    frame.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${VIDEO_ID}?rel=0&autoplay=1" title="STEMIA Design Process Explained" allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+    if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", "");
+  });
+  document.getElementById("vClose").addEventListener("click", () => dlg.close());
+  dlg.addEventListener("click", ev => { if (ev.target === dlg) dlg.close(); });
+  dlg.addEventListener("close", () => { frame.innerHTML = ""; document.getElementById("videoBtn").focus(); });
 })();
 
 </script>
