@@ -102,15 +102,7 @@ h1 .design { color: var(--explore); }
 
 /* Element shapes: the three phase shapes from the STEMIA graphic, each circle is a button */
 .shapes-wrap { display: grid; gap: 14px; }
-.hint { margin: 8px 0 22px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
-.hint .tapdot { position: relative; width: 22px; height: 22px; border-radius: 50%; background: var(--ink); }
-.hint .tapdot::after { content: ""; position: absolute; inset: -8px; border-radius: 50%; border: 2px solid var(--ink); animation: tap 1.8s ease-out infinite; }
-.hint strong { font-family: var(--display); font-weight: 800; font-size: clamp(22px, 3vw, 32px); line-height: 1.15; color: var(--ink); text-wrap: balance; max-width: 24ch; }
-.hint strong em { font-style: normal; color: var(--explore); }
-.hint .arrow { width: 14px; height: 14px; border-right: 3px solid var(--muted); border-bottom: 3px solid var(--muted); rotate: 45deg; animation: nudge 1.6s ease-in-out infinite; }
-@keyframes tap { 0% { transform: scale(.6); opacity: .9; } 100% { transform: scale(1.5); opacity: 0; } }
-@keyframes nudge { 0%, 100% { translate: 0 0; } 50% { translate: 0 6px; } }
-@media (prefers-reduced-motion: reduce) { .hint .tapdot::after, .hint .arrow { animation: none; } }
+.hint { margin: 0; color: var(--muted); font-size: 15px; text-align: center; }
 .shapes { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 28px; align-items: center; }
 .grp { min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .grp.explore { flex-direction: row; gap: 10px; }
@@ -271,7 +263,6 @@ footer p { margin: 0 0 6px; }
 
 
   <section class="shapes-wrap" id="elements" aria-label="Design elements">
-    <p class="hint"><strong>Tap any circle to open its <em>research and teaching guide</em></strong></p>
     <div class="shapes">
       <div class="grp explore">
                 <div class="vlabel" aria-hidden="true"><span>E</span><span>X</span><span>P</span><span>L</span><span>O</span><span>R</span><span>E</span></div>
@@ -300,6 +291,7 @@ footer p { margin: 0 0 6px; }
         </div>
       </div>
     </div>
+    <p class="hint">Tap any circle to open its research and teaching guide.</p>
   </section>
 
   <div class="always" role="note">
